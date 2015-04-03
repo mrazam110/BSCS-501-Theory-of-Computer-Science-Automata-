@@ -59,6 +59,40 @@ class dfa {
     }
 }
 
+func fa_or(fa1: dfa, fa2: dfa){
+    
+    var state:String = "\(fa1.initialState)\(fa2.initialState)"
+    var states = [String]()
+    
+    states.append(state)
+    
+    
+    
+}
+
+
+
+var letters:[Character] = ["a", "b"]
+var tt1 = [ [0,1], [0,1] ]
+var tt2 = [ [1,3], [3,2], [1,3], [3,3] ]
+
+
+var initialState:Int = 0
+
+var fs1:[Int] = [1]
+var fs2:[Int] = [0, 2]
+
+var fa1 = dfa(table: tt1, initialState: initialState, finalState: fs1, letter: letters)
+
+var fa2 = dfa(table: tt2, initialState: initialState, finalState: fs2, letter: letters)
+
+fa_or(fa1, fa2)
+
+
+
+
+
+
 
 
 
