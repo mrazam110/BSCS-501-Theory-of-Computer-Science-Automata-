@@ -2,6 +2,7 @@
 
 import UIKit
 
+//String extension
 extension String {
     
     subscript (i: Int) -> Character {
@@ -17,6 +18,7 @@ extension String {
     }
 }
 
+//MARK: DFA Class
 class dfa {
     var states:Int = 0
     
@@ -26,6 +28,7 @@ class dfa {
     
     var transitionTable:[[Int]]
     
+    //Constructor
     init(table: [[Int]], initialState:Int, finalState: [Int], letter:[Character]){
         self.transitionTable = table
         self.initialState = initialState
@@ -33,6 +36,7 @@ class dfa {
         self.char = letter
     }
     
+    //Transition Method
     func transition(stateToCheck:Int, charCheck:Character) -> Int {
         var output:Int = -1
         
@@ -44,6 +48,7 @@ class dfa {
         return output
     }
     
+    //Validation Method
     func validation(inputChar: String) -> Bool {
         var checkState:Int = self.initialState
         for var i:Int = 0; i < countElements(inputChar); i++ {
@@ -59,6 +64,7 @@ class dfa {
     }
 }
 
+//OR of Finite Automata Method
 func fa_or(fa1: dfa, fa2: dfa) -> dfa {
     
     var state:String = "\(fa1.initialState)\(fa2.initialState)"
@@ -69,26 +75,29 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
     var s1:Int
     var s2:Int
     
-    for var i:Int = 0; i < fa1.char.count; i++ {
-        s1 = fa1.transition(Int(state[0].toInt()!), charCheck: fa1.char[i])
-        s2 = fa2.transition(Int(state[1].toInt()!), charCheck: fa1.char[i])
+    //for var j:Int = 0; j < states.count; j++ {
+    
+        for var i:Int = 0; i < fa1.char.count; i++ {
+            s1 = fa1.transition(Int(state[0].toInt()!), charCheck: fa1.char[i])
+            s2 = fa2.transition(Int(state[1].toInt()!), charCheck: fa1.char[i])
         
-        var state2:String = "\(s1)\(s2)"
+            var state2:String = "\(s1)\(s2)"
         
-        var flag:Bool = false
+            var flag:Bool = false
         
-        for s in states {
-            if s == state2 {
-                flag = true
-            }else{
-                flag = false
+            for s in states {
+                if s == state2 {
+                    flag = true
+                }else{
+                    flag = false
+                }
+            }
+        
+            if (!flag){
+                states.append(state2)
             }
         }
-        
-        if (!flag){
-            states.append(state2)
-        }
-    }
+    //}
     
     println(states)
     
@@ -97,10 +106,11 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
 }
 
 
+//MARK: Main Method (You can say)
+//Declaring variables
 var letters:[Character] = ["a", "b"]
 var tt1 = [ [0,1], [0,1] ]
 var tt2 = [ [1,3], [3,2], [1,3], [3,3] ]
-
 
 var initialState:Int = 0
 
@@ -112,19 +122,3 @@ var fa1 = dfa(table: tt1, initialState: initialState, finalState: fs1, letter: l
 var fa2 = dfa(table: tt2, initialState: initialState, finalState: fs2, letter: letters)
 
 fa_or(fa1, fa2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
