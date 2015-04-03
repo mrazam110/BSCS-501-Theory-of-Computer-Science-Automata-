@@ -59,17 +59,42 @@ class dfa {
     }
 }
 
-func fa_or(fa1: dfa, fa2: dfa){
+func fa_or(fa1: dfa, fa2: dfa) -> dfa {
     
     var state:String = "\(fa1.initialState)\(fa2.initialState)"
     var states = [String]()
     
     states.append(state)
     
+    var s1:Int
+    var s2:Int
     
+    for var i:Int = 0; i < fa1.char.count; i++ {
+        s1 = fa1.transition(Int(state[0].toInt()!), charCheck: fa1.char[i])
+        s2 = fa2.transition(Int(state[1].toInt()!), charCheck: fa1.char[i])
+        
+        var state2:String = "\(s1)\(s2)"
+        
+        var flag:Bool = false
+        
+        for s in states {
+            if s == state2 {
+                flag = true
+            }else{
+                flag = false
+            }
+        }
+        
+        if (!flag){
+            states.append(state2)
+        }
+    }
+    
+    println(states)
+    
+    return fa1
     
 }
-
 
 
 var letters:[Character] = ["a", "b"]
