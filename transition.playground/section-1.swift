@@ -50,6 +50,22 @@ class dfa {
             checkState = transition(checkState, charCheck: inputChar[i])
         }
         
-        return true
+        for var j:Int = 0; j < finalStates.count; j++ {
+            if checkState == finalStates[j] {
+                return true
+            }
+        }
+        return false
     }
 }
+
+
+
+
+
+
+
+
+
+
+
