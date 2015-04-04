@@ -75,14 +75,19 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
     var s1:Int
     var s2:Int
     var newT_T = [[Int]]()
+    var newFinalState = [Int]()
+    var newInitialState:Int = 0
     var indexNum:Int = 0
     
-    var stateTo1:Int = 0
-    var stateTo2:Int = 0
+    
     
     //for var j:Int = 0; j < states.count; j++ {
     for var j = 0; j < states.count; j++ {
     
+        var stateTo1:Int = 0
+        var stateTo2:Int = 0
+        
+        var tempArrToStoreTransition = [Int]()
         var updateState:String = states[j]
         
         for var i:Int = 0; i < fa1.char.count; i++ {
@@ -108,18 +113,46 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
                 indexNum = states.count - 1
             }
             
-            
             if i == 0 {
                 stateTo1 = indexNum
             }else if i == 1 {
                 stateTo2 = indexNum
             }
         }
+        
+        
+        
         newT_T.insert([stateTo1, stateTo2], atIndex: j)
     }
     
     println(newT_T)
     println(states)
+    
+    for var f:Int = 0; f < states.count; f++ {
+        let s = states[f]
+        
+        for fa in fa1.finalStates {
+            if fa == s[0].toInt()! {
+                if !(contains(newFinalState, f)) {
+                    newFinalState.append(f)
+                }
+                break
+            }
+        }
+        
+        for fa in fa2.finalStates {
+            if fa == s[1].toInt()! {
+                if !(contains(newFinalState, f)) {
+                    newFinalState.append(f)
+                }
+                break
+            }
+        }
+    }
+    
+    println("Final State \(newFinalState)")
+    
+    let newDFA = dfa(table: newT_T, initialState: newInitialState, finalState: newFinalState, letter: letters)
     
     return fa1
     
