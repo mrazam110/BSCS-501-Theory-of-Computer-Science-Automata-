@@ -88,14 +88,8 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
         
             var flag:Bool = false
             
-            println()
-            
             for s in states {
-                println(s == newState)
                 if s == newState {
-                    println(s)
-                    println(newState)
-                    
                     flag = true
                     break
                 }else{
@@ -107,7 +101,6 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
             if (flag == false){
                 states.append(newState)
             }
-            println(states)
         }
     
     
