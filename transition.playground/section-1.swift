@@ -74,11 +74,16 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
     
     var s1:Int
     var s2:Int
+    var newT_T = [[Int]]()
+    var indexNum:Int = 0
+    
+    var stateTo1:Int = 0
+    var stateTo2:Int = 0
     
     //for var j:Int = 0; j < states.count; j++ {
-    for var i = 0; i < states.count; i++ {
+    for var j = 0; j < states.count; j++ {
     
-        var updateState:String = states[i]
+        var updateState:String = states[j]
         
         for var i:Int = 0; i < fa1.char.count; i++ {
             s1 = fa1.transition(Int(updateState[0].toInt()!), charCheck: fa1.char[i])
@@ -88,24 +93,32 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
         
             var flag:Bool = false
             
-            for s in states {
-                if s == newState {
+            for var n:Int = 0; n < states.count; n++ {
+                if states[n] == newState {
                     flag = true
+                    indexNum = n
                     break
                 }else{
-                    
                     flag = false
                 }
             }
         
             if (flag == false){
                 states.append(newState)
+                indexNum = states.count - 1
+            }
+            
+            
+            if i == 0 {
+                stateTo1 = indexNum
+            }else if i == 1 {
+                stateTo2 = indexNum
             }
         }
-    
-    
+        newT_T.insert([stateTo1, stateTo2], atIndex: j)
     }
     
+    println(newT_T)
     println(states)
     
     return fa1
