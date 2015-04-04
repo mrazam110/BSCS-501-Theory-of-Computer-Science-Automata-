@@ -76,28 +76,42 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
     var s2:Int
     
     //for var j:Int = 0; j < states.count; j++ {
+    for var i = 0; i < states.count; i++ {
     
-        for var i:Int = 0; i < fa1.char.count; i++ {
-            s1 = fa1.transition(Int(state[0].toInt()!), charCheck: fa1.char[i])
-            s2 = fa2.transition(Int(state[1].toInt()!), charCheck: fa1.char[i])
+        var updateState:String = states[i]
         
-            var state2:String = "\(s1)\(s2)"
+        for var i:Int = 0; i < fa1.char.count; i++ {
+            s1 = fa1.transition(Int(updateState[0].toInt()!), charCheck: fa1.char[i])
+            s2 = fa2.transition(Int(updateState[1].toInt()!), charCheck: fa1.char[i])
+        
+            var newState:String = "\(s1)\(s2)"
         
             var flag:Bool = false
-        
+            
+            println()
+            
             for s in states {
-                if s == state2 {
+                println(s == newState)
+                if s == newState {
+                    println(s)
+                    println(newState)
+                    
                     flag = true
+                    break
                 }else{
+                    
                     flag = false
                 }
             }
         
-            if (!flag){
-                states.append(state2)
+            if (flag == false){
+                states.append(newState)
             }
+            println(states)
         }
-    //}
+    
+    
+    }
     
     println(states)
     
