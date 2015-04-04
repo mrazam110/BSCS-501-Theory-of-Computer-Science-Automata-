@@ -120,42 +120,48 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
             }
         }
         
-        
-        
         newT_T.insert([stateTo1, stateTo2], atIndex: j)
     }
     
     println(newT_T)
     println(states)
     
+    newFinalState = getFinalStateOR_FA(finalState1: fa1.finalStates, finalState2: fa2.finalStates, states: states)
+    
+    println("Final State \(newFinalState)")
+    
+    let newDFA = dfa(table: newT_T, initialState: newInitialState, finalState: newFinalState, letter: letters)
+    
+    return newDFA
+}
+
+func getFinalStateOR_FA(#finalState1: [Int], #finalState2: [Int], #states: [String]) -> [Int] {
+    
+    var returnFinalState = [Int]()
+    
     for var f:Int = 0; f < states.count; f++ {
         let s = states[f]
         
-        for fa in fa1.finalStates {
+        for fa in finalState1 {
             if fa == s[0].toInt()! {
-                if !(contains(newFinalState, f)) {
-                    newFinalState.append(f)
+                if !(contains(returnFinalState, f)) {
+                    returnFinalState.append(f)
                 }
                 break
             }
         }
         
-        for fa in fa2.finalStates {
+        for fa in finalState2 {
             if fa == s[1].toInt()! {
-                if !(contains(newFinalState, f)) {
-                    newFinalState.append(f)
+                if !(contains(returnFinalState, f)) {
+                    returnFinalState.append(f)
                 }
                 break
             }
         }
     }
     
-    println("Final State \(newFinalState)")
-    
-    let newDFA = dfa(table: newT_T, initialState: newInitialState, finalState: newFinalState, letter: letters)
-    
-    return fa1
-    
+    return returnFinalState
 }
 
 
@@ -174,4 +180,7 @@ var fa1 = dfa(table: tt1, initialState: initialState, finalState: fs1, letter: l
 
 var fa2 = dfa(table: tt2, initialState: initialState, finalState: fs2, letter: letters)
 
-fa_or(fa1, fa2)
+var fa3 = fa_or(fa1, fa2)
+
+fa3.validation("ba")
+fa3.validation("ab")
