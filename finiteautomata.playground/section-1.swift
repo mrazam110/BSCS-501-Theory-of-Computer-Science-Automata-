@@ -1,7 +1,5 @@
 // Playground - noun: a place where people can play
 
-import UIKit
-
 //String extension
 extension String {
     
@@ -12,10 +10,7 @@ extension String {
     subscript (i: Int) -> String {
         return String(self[i] as Character)
     }
-    
-    subscript (r: Range<Int>) -> String {
-        return substringWithRange(Range(start: advance(startIndex, r.startIndex), end: advance(startIndex, r.endIndex)))
-    }
+
 }
 
 //MARK: DFA Class
@@ -64,6 +59,35 @@ class dfa {
     }
 }
 
+func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
+    var xStates = [String]()
+    var yStates = [String]()
+    
+    var x:String!
+    var y:String!
+    
+    x = "\(fa1.initialState)"
+    xStates.append(x)
+    
+    x = "2"
+    
+    if contains(fa1.finalStates, x.toInt()!){
+        if y != nil {
+            y = "\(y)\(fa2.initialState)"
+        }else{
+            y = "\(fa2.initialState)"
+        }
+        yStates.append(y)
+    }
+    
+    for _x in xStates {
+        fa1.transition(_x.toInt()!, charCheck: fa1.char[0])
+    }
+    
+    return fa1
+}
+
+
 //OR of Finite Automata Method
 func fa_or(fa1: dfa, fa2: dfa) -> dfa {
     
@@ -78,8 +102,6 @@ func fa_or(fa1: dfa, fa2: dfa) -> dfa {
     var newFinalState = [Int]()
     var newInitialState:Int = 0
     var indexNum:Int = 0
-    
-    
     
     //for var j:Int = 0; j < states.count; j++ {
     for var j = 0; j < states.count; j++ {
@@ -168,12 +190,12 @@ func getFinalStateOR_FA(#finalState1: [Int], #finalState2: [Int], #states: [Stri
 //MARK: Main Method (You can say)
 //Declaring variables
 var letters:[Character] = ["a", "b"]
-var tt1 = [ [0,1], [0,1] ]
-var tt2 = [ [1,3], [3,2], [1,3], [3,3] ]
+var tt1 = [ [1,3], [3,2], [2,2], [3,3] ]
+var tt2 = [ [3,1], [2,2], [2,1], [3,3] ]
 
 var initialState:Int = 0
 
-var fs1:[Int] = [1]
+var fs1:[Int] = [2]
 var fs2:[Int] = [0, 2]
 
 var fa1 = dfa(table: tt1, initialState: initialState, finalState: fs1, letter: letters)
@@ -181,6 +203,8 @@ var fa1 = dfa(table: tt1, initialState: initialState, finalState: fs1, letter: l
 var fa2 = dfa(table: tt2, initialState: initialState, finalState: fs2, letter: letters)
 
 var fa3 = fa_or(fa1, fa2)
+
+var fa4 = fa_concat(fa1, fa2)
 
 fa3.validation("ba")
 fa3.validation("ab")
