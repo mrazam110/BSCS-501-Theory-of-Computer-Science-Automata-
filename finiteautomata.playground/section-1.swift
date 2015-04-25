@@ -46,7 +46,7 @@ class dfa {
     //Validation Method
     func validation(inputChar: String) -> Bool {
         var checkState:Int = self.initialState
-        for var i:Int = 0; i < countElements(inputChar); i++ {
+        for var i:Int = 0; i < count(inputChar); i++ {
             checkState = transition(checkState, charCheck: inputChar[i])
         }
         
@@ -59,17 +59,18 @@ class dfa {
     }
 }
 
+
 func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
-    var xStates = [String]()
-    var yStates = [String]()
+    
+    var states = [String,String]()
     
     var x:String!
     var y:String!
     
     x = "\(fa1.initialState)"
-    xStates.append(x)
     
-    x = "2"
+    let a = ("\(2)", "")
+    states.append(a)
     
     if contains(fa1.finalStates, x.toInt()!){
         if y != nil {
@@ -77,11 +78,19 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
         }else{
             y = "\(fa2.initialState)"
         }
-        yStates.append(y)
+        states[0].1 = y
     }
     
-    for _x in xStates {
-        fa1.transition(_x.toInt()!, charCheck: fa1.char[0])
+    for var i:Int = 0; i < states.count; i++ {
+        var s1:String = ""
+        var s2:String = ""
+        
+        for var sOne:Int = 0; sOne < count(states[0].0); sOne++ {
+            s1 = "\(s1)\(fa1.transition(((states[0].0)[0]).toInt()!, charCheck: fa1.char[0]))"
+        }
+        if states[i].1 != "" {
+            s2 = "\(s2)\(fa2.transition(((states[0].1)[0]).toInt()!, charCheck: fa1.char[0]))"
+        }
     }
     
     return fa1
