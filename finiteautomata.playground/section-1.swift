@@ -62,7 +62,12 @@ class dfa {
 
 func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
     
+    var newT_T = [[Int]]()
     var states = [String,String]()
+    var newFinalState = [Int]()
+    var newInitialState:Int = 0
+    
+    var indexNum:Int = 0
     
     var x:String!
     var y:String!
@@ -83,6 +88,9 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
     
     for var i:Int = 0; i < states.count; i++ {
         
+        var stateTo1:Int = 0
+        var stateTo2:Int = 0
+        
         for var k:Int = 0; k < fa1.char.count; k++ {
         
             var s1:String = ""
@@ -102,7 +110,6 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
                         s2 = "\(s2)\(temp)"
                     }
                 }
-//              s2 = "\(s2)\(fa2.transition(((states[0].1)[0]).toInt()!, charCheck: fa1.char[0]))"
             }
         
             let _s1 = sortedString(s1)
@@ -114,6 +121,7 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
             for var j:Int = 0; j < states.count; j++ {
                 if states[j].0 == _s1 && states[j].1 == _s2{
                     flag = true
+                    indexNum = j
                     break
                 }else{
                     flag = false
@@ -123,8 +131,16 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
             if !flag {
                 let temp = ("\(_s1)", "\(_s2)")
                 states.append(temp)
+                indexNum = states.count - 1
+            }
+            
+            if k == 0 {
+                stateTo1 = indexNum
+            }else if k == 1 {
+                stateTo2 = indexNum
             }
         }
+        newT_T.insert([stateTo1, stateTo2], atIndex: i)
     }
     
     return fa1
