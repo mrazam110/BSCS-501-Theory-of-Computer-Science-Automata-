@@ -46,7 +46,7 @@ class dfa {
     //Validation Method
     func validation(inputChar: String) -> Bool {
         var checkState:Int = self.initialState
-        for var i:Int = 0; i < count(inputChar); i++ {
+        for var i:Int = 0; i < countElements(inputChar); i++ {
             checkState = transition(checkState, charCheck: inputChar[i])
         }
         
@@ -69,7 +69,7 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
     
     x = "\(fa1.initialState)"
     
-    let a = ("\(2)", "")
+    let a = ("\(0)", "")
     states.append(a)
     
     if contains(fa1.finalStates, x.toInt()!){
@@ -82,20 +82,57 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
     }
     
     for var i:Int = 0; i < states.count; i++ {
-        var s1:String = ""
-        var s2:String = ""
         
-        for var sOne:Int = 0; sOne < count(states[0].0); sOne++ {
-            s1 = "\(s1)\(fa1.transition(((states[0].0)[0]).toInt()!, charCheck: fa1.char[0]))"
-        }
-        if states[i].1 != "" {
-            s2 = "\(s2)\(fa2.transition(((states[0].1)[0]).toInt()!, charCheck: fa1.char[0]))"
+        for var k:Int = 0; k < fa1.char.count; k++ {
+        
+            var s1:String = ""
+            var s2:String = ""
+            
+            for var sOne:Int = 0; sOne < countElements(states[i].0); sOne++ {
+                s1 = "\(s1)\(fa1.transition(((states[i].0)[sOne]).toInt()!, charCheck: fa1.char[k]))"
+            
+                if contains(fa1.finalStates, s1[sOne].toInt()!){
+                s2 = "\(s2)\(fa2.initialState)"
+                }
+            }
+            if states[i].1 != "" {
+                for var sOne:Int = 0; sOne < countElements(states[i].1); sOne++ {
+                    let temp = "\(fa2.transition(((states[i].1)[sOne]).toInt()!, charCheck: fa1.char[k]))"
+                    if !contains(s2, temp[0]){
+                        s2 = "\(s2)\(temp)"
+                    }
+                }
+//              s2 = "\(s2)\(fa2.transition(((states[0].1)[0]).toInt()!, charCheck: fa1.char[0]))"
+            }
+        
+            let _s1 = sortedString(s1)
+            let _s2 = sortedString(s2)
+        
+            println("i=\(i) s1=\(_s1) s2=\(_s2)")
+            var flag:Bool = false
+        
+            for var j:Int = 0; j < states.count; j++ {
+                if states[j].0 == _s1 && states[j].1 == _s2{
+                    flag = true
+                    break
+                }else{
+                    flag = false
+                }
+            }
+        
+            if !flag {
+                let temp = ("\(_s1)", "\(_s2)")
+                states.append(temp)
+            }
         }
     }
     
     return fa1
 }
 
+func sortedString(str: String) -> String {
+    return String(sorted(str, { $0 < $1 } ))
+}
 
 //OR of Finite Automata Method
 func fa_or(fa1: dfa, fa2: dfa) -> dfa {
@@ -200,7 +237,7 @@ func getFinalStateOR_FA(#finalState1: [Int], #finalState2: [Int], #states: [Stri
 //Declaring variables
 var letters:[Character] = ["a", "b"]
 var tt1 = [ [1,3], [3,2], [2,2], [3,3] ]
-var tt2 = [ [3,1], [2,2], [2,1], [3,3] ]
+var tt2 = [ [3,1], [2,1], [2,1], [3,3] ]
 
 var initialState:Int = 0
 
@@ -211,9 +248,9 @@ var fa1 = dfa(table: tt1, initialState: initialState, finalState: fs1, letter: l
 
 var fa2 = dfa(table: tt2, initialState: initialState, finalState: fs2, letter: letters)
 
-var fa3 = fa_or(fa1, fa2)
+//var fa3 = fa_or(fa1, fa2)
 
 var fa4 = fa_concat(fa1, fa2)
-
-fa3.validation("ba")
-fa3.validation("ab")
+//
+//fa3.validation("ba")
+//fa3.validation("ab")
