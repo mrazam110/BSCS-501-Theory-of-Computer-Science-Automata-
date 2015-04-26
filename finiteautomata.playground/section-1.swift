@@ -115,7 +115,6 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
             let _s1 = sortedString(s1)
             let _s2 = sortedString(s2)
         
-            println("i=\(i) s1=\(_s1) s2=\(_s2)")
             var flag:Bool = false
         
             for var j:Int = 0; j < states.count; j++ {
@@ -124,7 +123,7 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
                     indexNum = j
                     break
                 }else{
-                    flag = false
+//                    flag = false
                 }
             }
         
@@ -132,6 +131,12 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
                 let temp = ("\(_s1)", "\(_s2)")
                 states.append(temp)
                 indexNum = states.count - 1
+                
+                for s in s2 {
+                    if contains(fa2.finalStates, "\(s)".toInt()!){
+                        newFinalState.append(indexNum)
+                    }
+                }
             }
             
             if k == 0 {
@@ -141,9 +146,16 @@ func fa_concat(fa1: dfa, fa2: dfa) -> dfa {
             }
         }
         newT_T.insert([stateTo1, stateTo2], atIndex: i)
+        
+        
     }
+    println(states)
+    println(newT_T)
+    println(newFinalState)
     
-    return fa1
+    let newDFA = dfa(table: newT_T, initialState: newInitialState, finalState: newFinalState, letter: fa1.char)
+    
+    return newDFA
 }
 
 func sortedString(str: String) -> String {
@@ -258,7 +270,7 @@ var tt2 = [ [3,1], [2,1], [2,1], [3,3] ]
 var initialState:Int = 0
 
 var fs1:[Int] = [2]
-var fs2:[Int] = [0, 2]
+var fs2:[Int] = [2]
 
 var fa1 = dfa(table: tt1, initialState: initialState, finalState: fs1, letter: letters)
 
