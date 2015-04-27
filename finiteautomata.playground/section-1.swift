@@ -260,6 +260,32 @@ func getFinalStateOR_FA(#finalState1: [Int], #finalState2: [Int], #states: [Stri
     return returnFinalState
 }
 
+func fa_complement(fa: dfa) -> dfa {
+    
+    var newFinalState = [Int]()
+    
+    for var i:Int = 0; i < fa.transitionTable.count; i++ {
+        if !contains(fa.finalStates, i) {
+            newFinalState.append(i)
+        }
+    }
+    
+    let newDFA = dfa(table: fa.transitionTable, initialState: fa.initialState, finalState: newFinalState, letter: fa.char)
+    
+    return newDFA
+}
+
+func fa_intersection(fa1: dfa, fa2: dfa) -> dfa {
+
+    let fa1Complement = fa_complement(fa1)
+    let fa2Complement = fa_complement(fa2)
+    
+    let fa3OR = fa_or(fa1Complement, fa2Complement)
+    
+    let newDFa = fa_complement(fa3OR)
+    
+    return newDFa
+}
 
 //MARK: Main Method (You can say)
 //Declaring variables
@@ -278,7 +304,10 @@ var fa2 = dfa(table: tt2, initialState: initialState, finalState: fs2, letter: l
 
 //var fa3 = fa_or(fa1, fa2)
 
-var fa4 = fa_concat(fa1, fa2)
+//var fa4 = fa_concat(fa1, fa2)
+
+var fa5 = fa_complement(fa1)
+
 //
 //fa3.validation("ba")
 //fa3.validation("ab")
